@@ -1,0 +1,37 @@
+{% for review in reviews %}
+<!-- Review Card -->
+<div class="review-card" data-aos="fade-up" data-index="{{ review.id }}" data-aos-delay="{{ forloop.counter }}00">
+    <div class="review-header">
+    <img src="{{ review.product.images.all.0.image.url }}" alt="{{ review.product.name }}" class="product-image" loading="lazy">
+    <div class="review-meta">
+        <h4>{{ review.title }}</h4>
+        <div class="rating">
+        {% for i in '12345' %}
+        {% if review.rating >= forloop.counter %}
+        <i class="bi bi-star-fill"></i>
+        {% elif review.rating >= forloop.counter0|add:"0.5"  %}
+        <i class="bi bi-star-half"></i>
+        {% else %}
+        <i class="bi bi-star"></i>
+        {% endif %}
+            {% endfor %}
+        <span>({{ review.rating }})</span>
+        </div>
+        <div class="review-date">Reviewed on {{ review.created_at|date:"M d, Y" }}</div>
+    </div>
+    </div>
+    <div class="review-content">
+    <p>{{ review.review }}</p>
+    </div>
+    <div class="review-footer">
+    <button type="button" class="btn-edit changes-review" data-url="{% url 'account:reviews' %}" data-index="{{ review.id }}" data-form_type="edit_review">Edit Review</button>
+    <button type="button" class="btn-delete changes-review" data-url="{% url 'account:reviews' %}" data-index="{{ review.id }}" data-form_type="delete_review">Delete</button>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Pagination -->
+{% include 'pagination.html' with page=reviews %}
+
+
+

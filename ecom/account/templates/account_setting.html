@@ -1,0 +1,153 @@
+<div class="tab-pane fade" id="settings">
+    <div class="section-header" data-aos="fade-up">
+    <h2>Account Settings</h2>
+    </div>
+
+    <div class="settings-content">
+    <!-- Personal Information -->
+    <div class="settings-section" data-aos="fade-up">
+        <h3>Personal Information</h3>
+        <form class="php-email-form settings-form" action="{% url 'account:settings' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type", value="edit_user">
+        <div class="row g-3">
+            <div class="col-md-6">
+            <label for="firstname" class="form-label">First name</label>
+            {{ edit_form.first_name }}
+            </div>
+            <div class="col-md-6">
+            <label for="lastname" class="form-label">Last name</label>
+            {{ edit_form.last_name }}
+            </div>
+            <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+            {{ edit_form.email }}
+            </div>
+            <div class="col-md-6">
+            <label for="phone" class="form-label">Phone</label>
+            {{ account_form.phone }}
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn-save">Save Changes</button>
+        </div>
+
+        <div class="loading">Loading</div>
+        <div class="error-message"></div>
+        <div class="sent-message">Your changes have been saved successfully!</div>
+        </form>
+    </div>
+
+    <!-- Email Preferences -->
+    <div class="settings-section" data-aos="fade-up" data-aos-delay="100">
+        <h3>Email Preferences</h3>
+        <form class="php-email-form settings-form" action="{% url 'account:settings' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type", value="email_preference">
+            {% with account=user.account %}
+            
+            <div class="preferences-list">
+                <div class="preference-item">
+                    <div class="preference-info">
+                    <h4>Order Updates</h4>
+                    <p>Receive notifications about your order status</p>
+                    </div>
+                    <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="orderUpdates" name="order_update" {% if account.order_update %}checked{% endif %}>
+                    </div>
+                </div>
+
+                <div class="preference-item">
+                    <div class="preference-info">
+                    <h4>Promotions</h4>
+                    <p>Receive emails about new promotions and deals</p>
+                    </div>
+                    <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="promotions" name="promotion" {% if account.promotion %}checked{% endif %}>
+                    </div>
+                </div>
+
+                <div class="preference-item">
+                    <div class="preference-info">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to our weekly newsletter</p>
+                    </div>
+                    <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="newsletter" name="subscribe" {% if account.subscribe %}checked{% endif %}>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+            <div class="form-buttons">
+                <button type="submit" class="btn-save">Save Changes</button>
+            </div>
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your changes have been saved successfully!</div>
+        </form>
+    </div>
+
+    <!-- Security Settings -->
+    <div class="settings-section" data-aos="fade-up" data-aos-delay="200">
+        <h3>Security</h3>
+        <form class="php-email-form settings-form" action="{% url 'account:settings' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="form_type", value="change_pwd">
+        <div class="row g-3">
+            <div class="col-md-12">
+            <label for="currentPassword" class="form-label">Current password</label>
+            {{ change_pwd_form.old_password }}
+            </div>
+            <div class="col-md-6">
+            <label for="newPassword" class="form-label">New password</label>
+            {{ change_pwd_form.new_password }}
+            </div>
+            <div class="col-md-6">
+            <label for="confirmPassword" class="form-label">Confirm password</label>
+            {{ change_pwd_form.new_password2 }}
+            </div>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn-save">Update Password</button>
+        </div>
+
+        <div class="loading">Loading</div>
+        <div class="error-message"></div>
+        <div class="sent-message">Your password has been updated successfully!</div>
+        </form>
+    </div>
+
+    <!-- Delete Account -->
+    <div class="settings-section danger-zone" data-aos="fade-up" data-aos-delay="300">
+        <h3>Delete Account</h3>
+        <div class="danger-zone-content">
+        <p>Once you delete your account, there is no going back. Please be certain.</p>
+        <button type="button" class="btn-danger delete-account" data-url="{% url 'account:settings' %}">Delete Account</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.delete-account', function (e) {
+        e.preventDefault();
+        const url =  $(this).data('url');
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                form_type: "delete_account",
+                 csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            headers : {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(json){
+                window.location.replace(json.url)
+            },
+            error: function(xhr, errmsg, err){}
+        })
+    })
+</script>

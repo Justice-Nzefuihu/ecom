@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+{% load tz %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="ecommerce-hero-1 hero section" id="hero">
+    <div class="container">
+    <div class="row align-items-center">
+        <div class="col-lg-6 content-col" data-aos="fade-right" data-aos-delay="100">
+        <div class="content">
+            <span class="promo-badge">New Collection {% now 'Y' %}</span>
+            <h1>Discover Stylish <span>Fashion</span> For Every Season</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo. Vestibulum ante ipsum primis in faucibus.</p>
+            <div class="hero-cta">
+            <a href="#" class="btn btn-shop">Shop Now <i class="bi bi-arrow-right"></i></a>
+            <a href="#" class="btn btn-collection">View Collection</a>
+            </div>
+            <div class="hero-features">
+            <div class="feature-item">
+                <i class="bi bi-truck"></i>
+                <span>Free Shipping</span>
+            </div>
+            <div class="feature-item">
+                <i class="bi bi-shield-check"></i>
+                <span>Secure Payment</span>
+            </div>
+            <div class="feature-item">
+                <i class="bi bi-arrow-repeat"></i>
+                <span>Easy Returns</span>
+            </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-lg-6 image-col" data-aos="fade-left" data-aos-delay="200">
+        <div class="hero-image">
+        
+            <img src="{% static 'images/product-f-9.webp' %}" alt="Fashion Product" class="main-product" loading="lazy">
+            {% for product in floating_products %}
+            <a href="">
+                <div class="floating-product product-{{ forloop.counter }}" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:'3' }}00">
+                  <img src="{{ product.prefetched_images.0.image.url }}" alt="{{ product.name }}">
+                  <div class="product-info">
+                    <h4>{{ product.name }}</h4>
+                    <span class="price">{{ product.sale_price }}</span>
+                  </div>
+                </div>
+            </a>
+            {% endfor %}
+            {% with floating_products.0 as product %}
+            {% if product and product.discount != 0 %}
+                <div class="discount-badge" data-aos="zoom-in" data-aos-delay="500">
+                <span class="percent">{{ product.discount }}%</span>
+                <span class="text">OFF</span>
+                </div>
+            {% endif %}
+            {% endwith %}
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+<!-- /Hero Section -->
+
+<!-- Info Cards Section -->
+<section id="info-cards" class="info-cards section light-background">
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <div class="row g-4 justify-content-center">
+        <!-- Info Card 1 -->
+        <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card text-center">
+            <div class="icon-box">
+            <i class="bi bi-truck"></i>
+            </div>
+            <h3>Free Shipping</h3>
+            <p>Nulla sit morbi vestibulum eros duis amet, consectetur vitae lacus. Ut quis tempor felis sed nunc viverra.</p>
+        </div>
+        </div><!-- End Info Card 1 -->
+
+        <!-- Info Card 2 -->
+        <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="info-card text-center">
+            <div class="icon-box">
+            <i class="bi bi-piggy-bank"></i>
+            </div>
+            <h3>Money Back Guarantee</h3>
+            <p>Nullam gravida felis ac nunc tincidunt, sed malesuada justo pulvinar. Vestibulum nec diam vitae eros.</p>
+        </div>
+        </div><!-- End Info Card 2 -->
+
+        <!-- Info Card 3 -->
+        <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+        <div class="info-card text-center">
+            <div class="icon-box">
+            <i class="bi bi-percent"></i>
+            </div>
+            <h3>Discount Offers</h3>
+            <p>Nulla ipsum nisi vel adipiscing amet, dignissim consectetur ornare. Vestibulum quis posuere elit auctor.</p>
+        </div>
+        </div><!-- End Info Card 3 -->
+
+        <!-- Info Card 4 -->
+        <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="500">
+        <div class="info-card text-center">
+            <div class="icon-box">
+            <i class="bi bi-headset"></i>
+            </div>
+            <h3>24/7 Support</h3>
+            <p>Ipsum dolor amet sit consectetur adipiscing, nullam vitae euismod tempor nunc felis vestibulum ornare.</p>
+        </div>
+        </div><!-- End Info Card 4 -->
+    </div>
+
+    </div>
+
+</section>
+<!-- /Info Cards Section -->
+
+<!-- Category Cards Section -->
+<section id="category-cards" class="category-cards section">
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <div class="category-slider swiper init-swiper">
+        <script type="application/json" class="swiper-config">
+        {
+            "loop": true,
+            "autoplay": {
+            "delay": 5000,
+            "disableOnInteraction": false
+            },
+            "grabCursor": true,
+            "speed": 600,
+            "slidesPerView": "auto",
+            "spaceBetween": 20,
+            "navigation": {
+            "nextEl": ".swiper-button-next",
+            "prevEl": ".swiper-button-prev"
+            },
+            "breakpoints": {
+            "320": {
+                "slidesPerView": 2,
+                "spaceBetween": 15
+            },
+            "576": {
+                "slidesPerView": 3,
+                "spaceBetween": 15
+            },
+            "768": {
+                "slidesPerView": 4,
+                "spaceBetween": 20
+            },
+            "992": {
+                "slidesPerView": 5,
+                "spaceBetween": 20
+            },
+            "1200": {
+                "slidesPerView": 6,
+                "spaceBetween": 20
+            }
+            }
+        }
+        </script>
+
+        <div class="swiper-wrapper">
+            {% for category in total_categories %}
+            <!-- Category Card 1 -->
+            <div class="swiper-slide">
+                <div class="category-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="category-image">
+                    <img src="{{ category.prefetched_products.0.prefetched_images.0.image.url }}" alt="{{ category.name }}" class="img-fluid">
+                </div>
+                <h3 class="category-title">{{ category.name }}</h3>
+                <p class="category-count">{{ category.prefetched_products|length }} Products</p>
+                <a href="ctaegory.html" class="stretched-link"></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    </div>
+
+</section><!-- /Category Cards Section -->
+
+<!-- Best Sellers Section -->
+<section id="best-sellers" class="best-sellers section">
+
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+    <h2>Best Sellers</h2>
+    <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <div class="row gy-4">
+        <!-- Product -->
+        {% for product in best_sellers %}
+        <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="product-card">
+            <div class="product-image">
+            <img src="{{ product.prefetched_images.0.image.url }}" class="img-fluid default-image" alt="{{ product.name }}" loading="lazy">
+            <img src="{{ product.prefetched_images.1.image.url }}" class="img-fluid hover-image" alt="{{ product.name }} hover" loading="lazy">
+            <div class="product-tags">
+                {% if product.is_new %}
+                <span class="badge bg-accent">New</span>
+                {% endif %}
+                {% if not product.in_stock %}
+                <span class="badge bg-sold-out">Sold Out</span>
+                {% endif %}
+                {% if product.is_sale %}
+                <span class="badge bg-sale">Sale</span>
+                {% endif %}
+            </div>
+            <div class="product-actions">
+                <button class="btn-wishlist" type="button" aria-label="Add to wishlist">
+                <i class="bi bi-heart"></i>
+                </button>
+                <button class="btn-quickview" type="button" aria-label="Quick view">
+                <i class="bi bi-eye"></i>
+                </button>
+            </div>
+            </div>
+            <div class="product-info">
+            <h3 class="product-title"><a href="product-details.html">{{ product.name }}</a></h3>
+            <div class="product-price">
+                {% if product.is_sale %}
+                <span class="current-price">${{ product.sale_price }}</span>
+                <span class="original-price">${{ product.price }}</span>
+                {% else %}
+                <span class="current-price">${{ product.price }}</span>
+                {% endif %}
+            </div>
+            <div class="product-rating">
+                {% for i in '12345' %}
+                {% if product.average_rating >= forloop.counter %}
+                <i class="bi bi-star-fill"></i>
+                {% elif product.average_rating >= forloop.counter0|add:"0.5"  %}
+                <i class="bi bi-star-half"></i>
+                {% else %}
+                <i class="bi bi-star"></i>
+                {% endif %}
+                {% endfor %}
+                <span class="rating-count">({{ product.rating_count }})</span>
+            </div>
+            <button class="btn btn-add-to-cart">
+                <i class="bi bi-bag-plus me-2"></i>Add to Cart
+            </button>
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+        <!-- End Product -->
+
+    </div>
+
+    </div>
+
+</section>
+<!-- /Best Sellers Section -->
+
+<!-- Product List Section -->
+<section id="product-list" class="product-list section">
+
+    <div class="container isotope-layout" data-aos="fade-up" data-aos-delay="100" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+
+    <div class="row">
+        <div class="col-12">
+        <div class="product-filters isotope-filters mb-5 d-flex justify-content-center" data-aos="fade-up">
+            <ul class="d-flex flex-wrap gap-2 list-unstyled">
+            <li class="filter-active" data-filter="*">All</li>
+            {% for category in categories %}
+            <li data-filter=".filter-{{ category.slug }}">{{ category.name }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        </div>
+    </div>
+
+    <div class="row product-container isotope-container" data-aos="fade-up" data-aos-delay="200">
+
+        <!-- Product Item 1 -->
+        {% for product in products %}
+        <div class="col-md-6 col-lg-3 product-item isotope-item filter-{{ product.category.root_slug }}">
+        <div class="product-card">
+            <div class="product-image">
+                {% if product.is_new %}
+                <span class="badge">New</span>
+                {% endif %}
+                {% if not product.in_stock %}
+                <span class="badge">Sold Out</span>
+                {% endif %}
+                {% if product.is_sale %}
+                <span class="badge">Sale</span>
+                {% endif %}
+                <img src="{{ product.prefetched_images.0.image.url }}" alt="{{ product.name }}" class="img-fluid main-img">
+                <img src="{{ product.prefetched_images.1.image.url }}" alt="{{ product.name }} Hover" class="img-fluid hover-img">
+                <div class="product-overlay">
+                    <a href="cart.html" class="btn-cart"><i class="bi bi-cart-plus"></i> Add to Cart</a>
+                    <div class="product-actions">
+                        <a href="#" class="action-btn"><i class="bi bi-heart"></i></a>
+                        <a href="#" class="action-btn"><i class="bi bi-eye"></i></a>
+                        <a href="#" class="action-btn"><i class="bi bi-arrow-left-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="product-info">
+            <h5 class="product-title"><a href="product-details.html">{{ product.name }}</a></h5>
+            <div class="product-price">
+                {% if product.is_sale %}
+                <span class="current-price">${{ product.sale_price }}</span>
+                <span class="old-price">${{ product.price }}</span>
+                {% else %}
+                <span class="current-price">${{ product.price }}</span>
+                {% endif %}
+            </div>
+            <div class="product-rating">
+                {% for i in '12345' %}
+                {% if product.average_rating >= forloop.counter %}
+                <i class="bi bi-star-fill"></i>
+                {% elif product.average_rating >= forloop.counter0|add:"0.5"  %}
+                <i class="bi bi-star-half"></i>
+                {% else %}
+                <i class="bi bi-star"></i>
+                {% endif %}
+                {% endfor %}
+                <span>({{ product.rating_count }})</span>
+            </div>
+            </div>
+        </div>
+        </div>
+        {% endfor %}
+        <!-- End Product Item -->
+
+    </div>
+
+    <div class="text-center mt-5" data-aos="fade-up">
+        <a href="#" class="view-all-btn">View All Products <i class="bi bi-arrow-right"></i></a>
+    </div>
+
+    </div>
+
+</section>
+<!-- /Product List Section -->
+{% endblock %}

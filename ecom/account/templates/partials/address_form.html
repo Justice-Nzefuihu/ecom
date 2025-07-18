@@ -1,0 +1,48 @@
+<h3>Address</h3>
+<form class="php-email-form settings-form" action="{% url 'account:addresses' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="form_type" value="add_address">
+    <input type="hidden" name="index" value="{{ index }}">
+    <div class="section-content">
+        <div class="row g-3">
+            <div class="col-md-12">
+                {{ form.street.label_tag }}
+                {{ address_form.street }}
+            </div>
+            <div class="col-md-4">
+                {{ form.city.label_tag }}
+                {{ address_form.city }}
+            </div>
+            <div class="col-md-4">
+                {{ form.state.label_tag }}                   
+                {{ address_form.state }}
+            </div>
+            <div class="col-md-4">
+                {{ form.zipcode.label_tag }}
+                {{ address_form.zipcode }}
+            </div>
+            <div class="col-md-12">
+                {{ form.country.label_tag }}
+                {{ address_form.country }}
+            </div>
+            <div class="col-md-6">
+                {{ address_form.default }}
+                <label class="form-check-label" for="default">
+                Make Default Shipping Address
+                </label>
+            </div>
+            <div class="col-md-6">
+                {{ address_form.billing }}
+                <label class="form-check-label" for="billing">
+                Make Billing Address
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-buttons">
+        <button type="submit" class="btn-save">Add Address</button>
+    </div>
+    <div class="loading">Loading</div>
+    <div class="error-message"></div>
+    <div class="sent-message">You have successfully added an address!</div>
+</form>

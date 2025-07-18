@@ -1,0 +1,66 @@
+<div class="tab-pane fade" id="reviews">
+    <div class="section-header" data-aos="fade-up">
+    <h2>My Reviews</h2>
+    <div class="header-actions">
+        <div class="dropdown">
+        <button class="filter-btn" data-bs-toggle="dropdown">
+            <i class="bi bi-funnel"></i>
+            <span>Sort by: Recent</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Recent</a></li>
+            <li><a class="dropdown-item" href="#">Highest Rating</a></li>
+            <li><a class="dropdown-item" href="#">Lowest Rating</a></li>
+        </ul>
+        </div>
+    </div>
+    </div>
+
+    <div class="reviews-grid">
+    {% include 'partials/review_cards.html' %}
+
+    </div>
+    
+    <section class="product-details">
+        <div class="product-details-tabs">
+            <!-- Reviews From -->
+        </div>
+    </section>
+</div>
+
+<script>
+    $(document).on('click', '.changes-review', function (e) {
+        e.preventDefault();
+
+        const button = $(this);
+        const url = button.data('url');
+        const index = button.data('index');
+        const form_type = button.data('form_type');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                form_type: form_type,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                index: index
+            },
+            headers : {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(json){
+                const card = $(`.review-card[data-index="${index}"]`);
+
+                if (form_type === 'delete_review') {
+                    card.fadeOut(300, function () { $(this).remove(); });
+                }
+                else if (form_type === 'edit_review') {
+                    $('.product-details-tabs').html(json.html);
+                }
+            },
+            error: function(xhr, errmsg, err){
+                alert("An error occurred. Please try again.")
+            }
+        })
+    })
+</script>

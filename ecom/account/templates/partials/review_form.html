@@ -1,0 +1,47 @@
+<div class="tab-pane" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+    <div class="product-reviews">
+    <div class="review-form-container">
+        <h4>Write a Review</h4>
+        <form class="review-form" action="{% url 'account:reviews' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="form_type" value="add_review">
+    <input type="hidden" name="index" value="{{ index }}">
+        <div class="rating-select mb-4">
+            <label class="form-label">Your Rating</label>
+            <div class="star-rating">
+            {% for value, label in review_form.fields.rating.choices %}
+            <input type="radio" id="star_{{ value }}" name="rating" value="{{ value }}">
+            <label for="star_{{ value }}" title="{{ value }} stars"><i class="bi bi-star-fill"></i></label>
+            {% endfor %}
+            </div>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+            <label for="review-name" class="form-label">Your Name</label>
+            {{ review_form.name }}
+            </div>
+            <div class="col-md-6">
+            <label for="review-email" class="form-label">Your Email</label>
+            {{ review_form.email }}
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="review-title" class="form-label">Review Title</label>
+            {{ review_form.title }}
+        </div>
+
+        <div class="mb-4">
+            <label for="review-content" class="form-label">Your Review</label>
+            {{ review_form.review }}
+            <div class="form-text">Tell others what you think about this product. Be honest and helpful!</div>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Update Review</button>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>

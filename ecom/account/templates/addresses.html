@@ -1,0 +1,146 @@
+<div class="tab-pane fade" id="addresses">
+    <div class="section-header" data-aos="fade-up">
+    <h2>My Addresses</h2>
+    <div class="header-actions">
+    </div>
+    </div>
+
+    <div class="addresses-grid">
+    {% for address in addresses %}
+        <!-- Address Card  -->
+        <div class="address-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00" data-index="{{ address.id }}">
+            <div class="card-header">
+            <h4>Address {{ forloop.counter }}</h4>
+            <div>
+                {% if address.default %}
+                <span class="default-badge ">Default</span>
+                {% endif %}
+                {% if address.billing %}
+                <span class="default-badge billing">Billing</span>
+                {% endif %}
+            </div>
+            </div>
+            <div class="card-body">
+            <p class="address-text">{{ address.street }}<br>{{ address.city }}, {{ address.state }} {{ address.zipcode }}<br>{{ address.country.country.name }}</p>
+            <div class="contact-info">
+
+                <div><i class="bi bi-person"></i> {{ address.user.user.first_name }} {{ address.user.user.last_name }}</div>
+                <div><i class="bi bi-telephone"></i> {{ address.user.phone }} </div>
+            </div>
+            </div>
+            <div class="card-actions">
+            <button type="button" class="btn-edit changes-address" data-url="{% url 'account:addresses' %}" data-index="{{ address.id }}" data-form_type="edit_address">
+                <i class="bi bi-pencil"></i>
+                Edit
+            </button>
+            <button type="button" class="btn-remove changes-address" data-url="{% url 'account:addresses' %}" data-index="{{ address.id }}" data-form_type="delete_address">
+                <i class="bi bi-trash"></i>
+                Remove
+            </button>
+            {% if not address.default %}
+            <button type="button" class="btn-make-default changes-address"  data-url="{% url 'account:addresses' %}" data-index="{{ address.id }}" data-form_type="make_default">Make Default</button>
+            {% endif %}
+            {% if not address.billing %}
+            <button type="button" class="btn-make-default changes-address"  data-url="{% url 'account:addresses' %}" data-index="{{ address.id }}" data-form_type="make_billing">Make Billing</button>
+            {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+
+    <!-- Address Form -->
+     <div>
+        <div class="settings-content">
+            <div class="settings-section">
+                {% include 'partials/address_form.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.changes-address', function (e) {
+        e.preventDefault();
+
+        const button = $(this);
+        const url = button.data('url');
+        const index = button.data('index');
+        const form_type = button.data('form_type');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                form_type: form_type,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                index: index
+            },
+            headers : {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(json){
+                const card = $(`.address-card[data-index="${index}"]`);
+                const badgeContainer = card.find('.card-header div');
+
+                if (form_type === 'delete_address') {
+                    card.fadeOut(300, function () { $(this).remove(); });
+                }
+                else if (form_type === 'make_default') {
+                    $('.address-card').each(function () {
+                        const header = $(this).find('.card-header div');
+                        const badge = header.find('.default-badge').not('.billing');
+                        if (badge.length) {
+                            badge.remove();
+                            const index = $(this).data('index');
+                            if (!$(this).find('[data-form_type="make_default"]').length) {
+                                $(this).find('.card-actions').append(`
+                                    <button type="button" class="btn-make-default changes-address"  
+                                        data-url="${url}" 
+                                        data-index="${index}" 
+                                        data-form_type="make_default">
+                                        Make Default
+                                    </button>
+                                `);
+                            }
+                        }
+                    });
+                    card.find('.card-header div').append('<span class="default-badge">Default</span>');
+                    button.remove();
+                } 
+                else if (form_type === 'make_billing') {
+                    $('.address-card').each(function () {
+                        const header = $(this).find('.card-header div');
+                        const badge = header.find('.billing');
+                        if (badge.length) {
+                            badge.remove();
+                            const index = $(this).data('index');
+                            if (!$(this).find('[data-form_type="make_billing"]').length) {
+                                $(this).find('.card-actions').append(`
+                                    <button type="button" class="btn-make-default changes-address"  
+                                        data-url="${url}" 
+                                        data-index="${index}" 
+                                        data-form_type="make_billing">
+                                        Make Billing
+                                    </button>
+                                `);
+                            }
+                        }
+                    });
+                    card.find('.card-header div').append('<span class="default-badge billing">Billing</span>');
+                    button.remove();
+                } 
+                else if (form_type === 'edit_address') {
+                    $('.settings-section').html(json.html);
+                }
+            },
+            error: function(xhr, errmsg, err){
+                $('#alert-container').html(`
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    An error occurred. Please try again.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `);
+            }
+        })
+    })
+</script>

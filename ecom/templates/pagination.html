@@ -1,0 +1,49 @@
+<div class="pagination-wrapper" data-aos="fade-up">
+    <button type="button" class="btn-prev page-link" {% if page.has_previous %}data-url="?page={{ page.previous_page_number }}" {% else %} disabled{% endif %}>
+        <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <div class="page-numbers">
+        {% if page.number > 3 %}
+            <button type="button" class="page-link" data-url="?page=1">1</button>
+            {% if page.number > 4 %}
+                <span>...</span>
+            {% endif %}
+        {% endif %}
+
+        {% for num in page.paginator.page_range %}
+            {% if num >= page.number|add:'-2' and num <= page.number|add:'2' %}
+                <button type="button" class="page-link {% if num == page.number %}active{% endif %}" data-url="?page={{ num }}">{{ num }}</button>
+            {% endif %}
+        {% endfor %}
+
+        {% if page.number < page.paginator.num_pages|add:'-2' %}
+            {% if page.number < page.paginator.num_pages|add:'-3' %}
+                <span>...</span>
+            {% endif %}
+            <button type="button" class="page-link" data-url="?page={{ page.paginator.num_pages }}">{{ page.paginator.num_pages }}</button>
+        {% endif %}
+    </div>
+
+    <button type="button" class="btn-next page-link" {% if page.has_next %}data-url="?page={{ page.next_page_number }}"{% else %} disabled{% endif %}>
+        <i class="bi bi-chevron-right"></i>
+    </button>
+</div>
+
+
+ <script>
+   $(document).on('click', '.page-link', function (e){
+        e.preventDefault();
+        let url = $(this).data('url');
+
+        if (!url) return;
+
+        $.get(url, {pagination: true }, function(response) {
+            $(`.${response.grid}-grid`).html(response.html)
+        }).fail(
+            function (xhr) {
+                alert('Failed to load data. Please try again.');
+            }
+        )
+      })
+ </script>
